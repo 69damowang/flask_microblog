@@ -1,0 +1,15 @@
+<html>
+	<head>
+		{% if title %}
+			<title>{{title}}- Microblog </title> <!传过来title>
+		{% else %}
+			<title>Welcome to Microblog!</title>  <!没有传过来title>
+		{% endif %}
+	</head>
+	<body>
+        {% block content %}
+
+        {% endblock %}
+	</body>
+</html>
+
