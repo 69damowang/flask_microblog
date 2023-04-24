@@ -1,4 +1,4 @@
-
+from flask import render_template
 
 from app import app#从app包中导入 app这个实例
 
@@ -7,5 +7,19 @@ from app import app#从app包中导入 app这个实例
 @app.route('/index')
 #1个视图函数
 def index():
-	return "Hello,World!"#返回一个字符串
+	user = {'username':'scott'}
+	#模拟的评论数据
+	posts = [
+		{
+			'author':{'username':'John'},
+			'body':'Beautiful day Portland!'
+		},
+		{
+			'author': {'username': 'Susan'},
+			'body': 'Beautiful day so cool'
+		}
+	]
+	return render_template('index.html',user = user,posts = posts)
+
+
 
