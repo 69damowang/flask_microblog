@@ -1,6 +1,6 @@
 from urllib import request
 
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for,request
 from flask_wtf import form
 from werkzeug.urls import url_parse
 
@@ -8,8 +8,8 @@ from app import app, db  # 从app包中导入 app这个实例
 
 from app.forms import LoginForm, RegistrationForm
 
-from flask_login import current_user, login_user, login_required
-from app.models import User
+from flask_login import current_user, login_user, login_required,UserMixin
+from app.models import User,Post
 
 from flask_login import logout_user #退出登录
 #主页路由

@@ -22,7 +22,16 @@ class User(UserMixin,db.Model): #UserMixin继承UserMixin里面的四个属性
     posts = db.relationship('Post',backref = 'author',lazy = 'dynamic')  #反向引用backref，可以从文章找回用户 #lazy = 'dynamic'
 
     def __repr__(self):
-        return'<User {}>'.format(self.username)
+        return '<User {}>'.format(self.username)
+
+
+    def set_password(self,password):
+        self.password_hash = generate_password_hash(password) #生成一个哈希加密
+
+    def check_password(self,password):
+        return check_password_hash(self.password_hash,password) #检查密码，返回True说明对
+
+
 
 #推文模型
 class Post(db.Model):
@@ -31,11 +40,6 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime,index = True,default = datetime.utcnow) #电脑默认时间default = datetime.utcnow
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
-    def set_password(self,password):
-        self.password_hash = generate_password_hash(password) #生成一个哈希加密
-
-    def check_password(self,password):
-        return check_password_hash(self.password_hash,password) #检查密码，返回True说明对
 
     def __repr__(self):
         return'<Post {}>'.format(self.body)
