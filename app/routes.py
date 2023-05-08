@@ -14,6 +14,8 @@ from app.models import User,Post
 
 from flask_login import logout_user #退出登录
 
+
+
 @app.before_request #上次登录时间,UTC时间
 def before_request():
 	if current_user.is_authenticated:
@@ -112,5 +114,52 @@ def edit_profile():
 		form.username.data = current_user.username
 		form.about_me.data = current_user.about_me
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+#关注的路由
+@app.route('/follow/<username>')
+@login_required
+def follow(username):
+	user = User.query.filter_by(username = username).first()
+	if user is None:
+		flash('User {} not found.'.format(username))
+		return redirect(url_for('index'))
+	if user == current_user:
+		flash('You canot follow yourself!')
+		return redirect(url_for('user',username= username))
+	current_user.follow(user)
+	db.session.commit()
+	flash('You are following {}!'.format(username))
+	return redirect(url_for('user',username = username))
+
+@app.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+	user = User.query.filter_by(username = username).first()
+	if user is None:
+		flash('User {} not found.'.format(username))
+		return redirect(url_for('index'))
+	if user == current_user:
+		flash('You cannot unfollow yourself!')
+		return redirect(url_for('user', username = username))
+	current_user.unfollow(user)
+	db.session.commit()
+	flash('You are not following {}.'.format(username))
+	return redirect(url_for('user', username=username))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
